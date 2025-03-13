@@ -74,7 +74,7 @@ public class GenerateAst {
         // Fields
         writer.println();
         for (String field: fields) {
-            writer.println("    final " + field + ";");
+            writer.println("        final " + field + ";");
         }
 
         writer.println("    }");
