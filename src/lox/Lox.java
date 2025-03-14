@@ -49,11 +49,18 @@ public class Lox {
         Expr expression = parser.parse();
 
         if (hadError) return;
+
+        System.out.println(new AstPrinter().print(expression));
     }
 
     private static void report(int line, String where, String message) {
         System.out.println("[line " + line + "] Error" + where + ": " + message);
         hadError = true;
+    }
+
+    static void error(int line, String message) {
+        report(line, "", message);
+        if (hadError) return;
     }
 
     static void error(Token token, String message) {
