@@ -9,7 +9,9 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Lox {
+    private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;    // indicates code has known error
+    static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -27,6 +29,7 @@ public class Lox {
         run(new String(bytes, Charset.defaultCharset()));
 
         if (hadError) System.exit(65);
+        if (hadRuntimeError) System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -48,9 +51,10 @@ public class Lox {
         Parser parser = new Parser(tokens);
         Expr expression = parser.parse();
 
+        // stop if there was a syntax error
         if (hadError) return;
 
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     }
 
     private static void report(int line, String where, String message) {
@@ -69,5 +73,10 @@ public class Lox {
         } else {
             report(token.line, " at " + token.lexeme + "'", message);
         }
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.out.println(error.getMessage() + "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 }
