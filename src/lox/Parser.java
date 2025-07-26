@@ -148,7 +148,7 @@ public class Parser {
         return new Stmt.Expression(expr);
     }
 
-    private Stmt ClassDeclaration() {
+    private Stmt classDeclaration() {
         Token name = consume(TokenType.IDENTIFIER, "Expect class name.");
         consume(TokenType.LEFT_BRACE, "Expect '{' before class body.");
 
